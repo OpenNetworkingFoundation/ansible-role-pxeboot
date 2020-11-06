@@ -1,0 +1,13 @@
+---
+# pxeboot tasks/Debian.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+- name: Install unzip to decompress files
+  apt:
+    name:
+      - "unzip"
+    state: "present"
+    update_cache: true
+    cache_valid_time: 3600

@@ -1,0 +1,91 @@
+#!ipxe
+{#
+SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+SPDX-License-Identifier: Apache-2.0
+#}
+
+# variables
+set menu_timeout 10000
+set menu_default exit
+set http_server_url {{ pxeboot_web_server }}
+
+# menu
+:start
+menu ONF iPXE Boot Menu
+item --gap --             ------------------------- System Info ------------------------------------
+item --gap --             MAC: ${net0/mac}, Serial Number: ${serial}, Chipset: ${net0/chip}
+item --gap --             Manufacturer: ${manufacturer}, Product: ${product}
+item --gap --             UUID: ${uuid}
+item --gap --             ------------------------- Network Info ------------------------------------
+item --gap --             IP: ${net0/ip}, Netmask: ${net0/netmask}, Gateway: ${net0/gateway}
+item --gap --             DNS Servers: ${net0/dns}, Domain: ${net0/domain}
+item --gap --             DHCP Server: ${net0/dhcp-server}
+item --gap --             ------------------------- Operating systems ------------------------------
+item --key u ub1804       Ubuntu 18.04 Installer
+item --key u ub1804a      Ubuntu 18.04 Installer (fully automatic)
+item --gap --             ------------------------- Diagnostics ------------------------------------
+item --key m memtest      Memtest
+item --gap --             ------------------------- Other ------------------------------------------
+item --key c configure    Configuration Menu
+item --key s shell        iPXE Shell
+item --key r reboot       Reboot
+item --key x exit         Exit iPXE and continue system boot
+choose --timeout ${menu_timeout} --default ${menu_default} selected || goto cancel
+set menu-timeout 0
+goto ${selected}
+
+# other functions
+:cancel
+echo Menu canceled, dropping to iPXE shell
+goto shell
+
+:configure
+config
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:reboot
+reboot
+
+:exit
+exit
+
+# diagnostics
+:memtest
+echo Booting Memtest
+kernel ${http_server_url}/memtest/memdisk
+initrd ${http_server_url}/memtest/memtest.iso
+imgargs memdisk iso raw
+boot || goto failed
+
+# installers
+
+# Ubuntu 18.04
+:ub1804
+echo Booting Ubuntu 18.04 Installer
+kernel ${http_server_url}/ubuntu1804/linux
+initrd ${http_server_url}/ubuntu1804/initrd.gz
+# imgargs {{ pxeboot_ubuntu1804_linux_args }}
+boot || goto failed
+
+# Ubuntu 18.04 autoinstall
+#  https://ipxe.org/appnote/debian_preseed
+:ub1804a
+echo Booting Ubuntu 18.04 Installer
+kernel ${http_server_url}/ubuntu1804/linux
+initrd ${http_server_url}/ubuntu1804/initrd.gz
+initrd ${http_server_url}/ubuntu1804/${serial}_preseed.cfg preseed.cfg
+# imgargs {{ pxeboot_ubuntu1804_linux_args }}
+boot || goto failed

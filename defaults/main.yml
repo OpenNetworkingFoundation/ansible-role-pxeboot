@@ -1,0 +1,51 @@
+---
+# pxeboot defaults/main.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+# webserver that serves the chainload script
+pxeboot_web_server: "http://boot.example.com"
+pxeboot_web_root: "/srv/sites/boot.example.com"
+
+# dist dir, where downloaded files are stored
+pxeboot_dist_dir: "/opt/dist/pxeboot"
+
+# memtest image
+#  see: https://ipxe.org/appnote/memtest
+pxeboot_memtest_version: "5.01"
+pxeboot_memtest_checksum: "sha256:42b8da364fec58de1ea8d8ec8102bc3d2e7b1f10e8e63b55a2d8f7aba3fad715"
+
+# this beta version crashes on some systems...
+#  pxeboot_memtest_version: "5.31b"
+#  pxeboot_memtest_checksum: >
+#    "sha256:ef0f31be2f7d72ceac3e9382ff8668b9ace4881eed730cc733756bfdb1cb427a"
+
+pxeboot_syslinux_version: "5.10"
+pxeboot_syslinux_checksum: "sha256:d9cd7727bfed2c0ca5bf07bb3d213286e014a78e92a6a89ac32eb906d6b7ab3f"
+
+# Ubuntu 18.04 image
+pxeboot_ubuntu1804_base_url: "http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64"
+pxeboot_ubuntu1804_version: "20101020ubuntu543.17/images/hwe-netboot/ubuntu-installer/amd64"
+
+pxeboot_ubuntu1804_files:
+  - name: "linux"
+    checksum: "sha256:192f8a4357d6aa4d551ea943ec7c947e1f0b3a9a4e3ecd4dc483f8cb1972584e"
+  - name: "initrd.gz"
+    checksum: "sha256:b09083fd563c183f3ddbe1e28132620f2c5466d49c25c0b8299ae581165d04db"
+
+pxeboot_ubuntu1804_linux_args: ""
+
+# preseed config
+
+# this should be replaced with a modular crypt string, or login will not work.
+preseed_onfadmin_pw_crypt: "!!"
+
+# this needs to be set as pubkey auth is the only remote login method
+preseed_onfadmin_ssh_pubkey: ""
+
+# list of hosts
+pxeboot_hosts:
+  - serial: "12345678"
+    hostname: "host"
+    domain: "domain"

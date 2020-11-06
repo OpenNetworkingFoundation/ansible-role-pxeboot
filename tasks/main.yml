@@ -1,0 +1,39 @@
+---
+# pxeboot tasks/main.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+- name: include OS-specific vars
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: include OS-specific tasks
+  include_tasks: "{{ ansible_os_family }}.yml"
+
+- name: Create pxeboot dist dir
+  file:
+    state: directory
+    path: "{{ pxeboot_dist_dir }}"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0755"
+
+- name: Create pxeboot webroot dir (may already exist from webserver role)
+  file:
+    state: directory
+    path: "{{ pxeboot_web_root }}"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0755"
+
+# create boot targets
+- include_tasks: "memtest.yml"
+- include_tasks: "ubuntu1804.yml"
+
+- name: Create iPXE menu chainboot script from template
+  template:
+    src: "boot.ipxe.j2"
+    dest: "{{ pxeboot_web_root }}/boot.ipxe"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: 0644

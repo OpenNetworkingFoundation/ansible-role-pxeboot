@@ -1,0 +1,77 @@
+---
+# pxeboot tasks/memtest.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+- name: Create memtest dir in webroot
+  file:
+    state: directory
+    path: "{{ pxeboot_web_root }}/memtest"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0755"
+
+- name: Download memtest compressed ISO
+  get_url:
+    url: >
+      http://memtest.org/download/{{ pxeboot_memtest_version }}/memtest86+-{{ pxeboot_memtest_version }}.iso.gz
+    checksum: "{{ pxeboot_memtest_checksum }}"
+    dest: "{{ pxeboot_dist_dir }}/memtest86+-{{ pxeboot_memtest_version }}.iso.gz"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: memtest_dl
+
+# ansible unarchive module can't handle bare (not tarred) gzipped files
+#  https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#notes
+- name: Decompress memtest ISO
+  command:
+    cmd: "gunzip -k {{ pxeboot_dist_dir }}/memtest86+-{{ pxeboot_memtest_version }}.iso.gz"
+    creates: "{{ pxeboot_dist_dir }}/memtest86+-{{ pxeboot_memtest_version }}.iso"
+
+- name: Copy memtest ISO to web root
+  copy:
+    remote_src: true
+    src: "{{ pxeboot_dist_dir }}/memtest86+-{{ pxeboot_memtest_version }}.iso"
+    dest: "{{ pxeboot_web_root }}/memtest/memtest.iso"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: 0644
+
+- name: Download syslinux archive (contains memdisk)
+  get_url:
+    url: >
+      https://www.kernel.org/pub/linux/utils/boot/syslinux/syslinux-{{ pxeboot_syslinux_version }}.zip
+    checksum: "{{ pxeboot_syslinux_checksum }}"
+    dest: "{{ pxeboot_dist_dir }}/syslinux-{{ pxeboot_syslinux_version }}.zip"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: syslinux_dl
+
+- name: Create syslinux unarchive dir
+  file:
+    state: directory
+    path: "{{ pxeboot_dist_dir }}/syslinux-{{ pxeboot_syslinux_version }}"
+    owner: "root"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0755"
+
+- name: Unarchive syslinux
+  unarchive:
+    remote_src: true
+    src: "{{ pxeboot_dist_dir }}/syslinux-{{ pxeboot_syslinux_version }}.zip"
+    dest: "{{ pxeboot_dist_dir }}/syslinux-{{ pxeboot_syslinux_version }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: Copy memdisk from syslinux
+  copy:
+    remote_src: true
+    src: "{{ pxeboot_dist_dir }}/syslinux-{{ pxeboot_syslinux_version }}/memdisk/memdisk"
+    dest: "{{ pxeboot_web_root }}/memtest/memdisk"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: 0644

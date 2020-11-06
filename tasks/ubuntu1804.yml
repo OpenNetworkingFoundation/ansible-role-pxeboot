@@ -1,0 +1,32 @@
+---
+# pxeboot tasks/ubuntu1804.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+- name: Create ubuntu1804 dir in webroot
+  file:
+    state: directory
+    path: "{{ pxeboot_web_root }}/ubuntu1804"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0755"
+
+- name: Download ubuntu1804 files
+  get_url:
+    url: "{{ pxeboot_ubuntu1804_base_url }}/{{ pxeboot_ubuntu1804_version }}/{{ item['name'] }}"
+    dest: "{{ pxeboot_web_root }}/ubuntu1804/{{ item['name'] }}"
+    checksum: "{{ item['checksum'] }}"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_ubuntu1804_files }}"
+
+- name: Create preseed files
+  template:
+    src: "ubuntu1804_preseed.cfg.j2"
+    dest: "{{ pxeboot_web_root }}/ubuntu1804/{{ item['serial'] }}_preseed.cfg"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_hosts }}"

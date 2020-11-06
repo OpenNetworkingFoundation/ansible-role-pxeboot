@@ -1,0 +1,31 @@
+---
+# pxeboot molecule/default/molecule.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: "ubuntu-18.04-priv"
+    image: "quay.io/paulfantom/molecule-systemd:ubuntu-18.04"
+    privileged: true
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+  - name: "debian-10-priv"
+    image: "quay.io/paulfantom/molecule-systemd:debian-10"
+    privileged: true
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+provisioner:
+  name: ansible
+  inventory:
+    host_vars:
+      debian-10-priv:
+        ansible_python_interpreter: /usr/bin/python3
+      ubuntu-18.04-priv:
+        ansible_python_interpreter: /usr/bin/python3
+verifier:
+  name: ansible
