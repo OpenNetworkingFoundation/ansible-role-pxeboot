@@ -25,7 +25,7 @@ d-i clock-setup/ntp-server string ntp.ubuntu.com
 # network and hostname
 d-i netcfg/choose_interface select auto
 d-i netcfg/hostname string {{ item['hostname'] }}
-d-i netcfg/domain string {{ item['domain'] }}
+d-i netcfg/get_domain string {{ item['domain'] }}
 d-i hw-detect/load_firmware boolean true
 
 ## Storage
@@ -61,9 +61,20 @@ d-i partman/choose_partition select finish
 d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
 
-# fix issue with grub hang on install
+### Do NOT install on the USB stick(!)
+#
+# The Debian installer will install on the first disk it finds which can
+# sometimes be the USB stick itself. Work around this by rolling our own auto
+# detect logic which disallows installing on USB devices.
+#
+# Also, fix issue with grub hang on install
 #  https://bugs.launchpad.net/ubuntu/+source/os-prober/+bug/1663645
 d-i partman/early_command string \
+  USBDEV_LIST="$(mktemp)"; \
+  list-devices usb-partition | sed "s/\(.*\)./\1/" > "$USBDEV_LIST"; \
+  BOOTDEV="$(list-devices disk | grep -vf "$USBDEV_LIST" | head -n 1)"; \
+  debconf-set partman-auto/disk "$BOOTDEV"; \
+  debconf-set grub-installer/bootdev "$BOOTDEV"; \
   while /bin/true; do sleep 0.01; rm -f /target/etc/grub.d/30_os-prober; done &
 
 d-i grub-installer/only_debian boolean true

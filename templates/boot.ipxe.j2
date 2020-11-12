@@ -84,7 +84,7 @@ boot || goto failed
 #  https://ipxe.org/appnote/debian_preseed
 :ub1804a
 echo Booting Ubuntu 18.04 Installer
-kernel ${http_server_url}/ubuntu1804/linux
+kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg
 initrd ${http_server_url}/ubuntu1804/initrd.gz
 initrd ${http_server_url}/ubuntu1804/${serial}_preseed.cfg preseed.cfg
 # imgargs {{ pxeboot_ubuntu1804_linux_args }}
