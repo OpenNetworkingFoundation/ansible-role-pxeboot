@@ -23,6 +23,7 @@ item --gap --             DHCP Server: ${net0/dhcp-server}
 item --gap --             ------------------------- Operating systems ------------------------------
 item --key u ub1804       Ubuntu 18.04 Installer
 item --key u ub1804a      Ubuntu 18.04 Installer (fully automatic)
+item --key u ub1804adt    Ubuntu 18.04 Installer (fully automatic, debug, text)
 item --gap --             ------------------------- Diagnostics ------------------------------------
 item --key m memtest      Memtest
 item --gap --             ------------------------- Other ------------------------------------------
@@ -77,7 +78,6 @@ boot || goto failed
 echo Booting Ubuntu 18.04 Installer
 kernel ${http_server_url}/ubuntu1804/linux
 initrd ${http_server_url}/ubuntu1804/initrd.gz
-# imgargs {{ pxeboot_ubuntu1804_linux_args }}
 boot || goto failed
 
 # Ubuntu 18.04 autoinstall
@@ -87,5 +87,12 @@ echo Booting Ubuntu 18.04 Installer
 kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg
 initrd ${http_server_url}/ubuntu1804/initrd.gz
 initrd ${http_server_url}/ubuntu1804/${serial}_preseed.cfg preseed.cfg
-# imgargs {{ pxeboot_ubuntu1804_linux_args }}
+boot || goto failed
+
+# Ubuntu 18.04 autoinstall, text-mode, debug
+:ub1804adt
+echo Booting Ubuntu 18.04 Installer, text mode, debug
+kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg DEBIAN_FRONTEND=text BOOT_DEBUG=2
+initrd ${http_server_url}/ubuntu1804/initrd.gz
+initrd ${http_server_url}/ubuntu1804/${serial}_preseed.cfg preseed.cfg
 boot || goto failed
