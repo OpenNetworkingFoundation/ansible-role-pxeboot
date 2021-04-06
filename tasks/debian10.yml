@@ -1,0 +1,43 @@
+---
+# pxeboot tasks/debian10.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+- name: Create debian10 dir in webroot
+  file:
+    state: directory
+    path: "{{ pxeboot_web_root }}/debian10"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0755"
+
+- name: Download debian10 base files
+  get_url:
+    url: "{{ pxeboot_debian10_base_url }}/{{ pxeboot_debian10_version }}/{{ item['name'] }}"
+    dest: "{{ pxeboot_web_root }}/debian10/{{ item['name'] }}"
+    checksum: "{{ item['checksum'] }}"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_debian10_files }}"
+
+- name: Download debian10 nonfree files
+  get_url:
+    url: "{{ pxeboot_debian10_nonfree_url }}/{{ item['path'] }}/{{ item['name'] }}"
+    dest: "{{ pxeboot_web_root }}/debian10/{{ item['name'] }}"
+    checksum: "{{ item['checksum'] }}"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_debian10_nonfree_files }}"
+
+# FIXME: No preseed yet
+# - name: Create preseed files
+#   template:
+#     src: "debian10_preseed.cfg.j2"
+#     dest: "{{ pxeboot_web_root }}/debian10/{{ item['serial'] }}_preseed.cfg"
+#     owner: "{{ pxeboot_username }}"
+#     group: "{{ pxeboot_groupname }}"
+#     mode: "0644"
+#   with_items: "{{ pxeboot_hosts }}"

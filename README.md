@@ -13,6 +13,7 @@ The iPXE `boot.ipxe` script:
 - Has a menu that reports system information and network status
 - Gives options for installation (interactive and autoinstall) and diagnostic
   tools (currently: memtest)
+  - Alternate options to help debug or supply nonfree firmware
 - By default, continues boot normally after 10 seconds
 
 Also populates the kernel, initrd, and other files needed to network boot.
@@ -40,6 +41,10 @@ Documentation of the preseed process can be found in these links:
 
 - iPXE docs on preseed files and kernel arguments:
   https://ipxe.org/appnote/debian_preseed
+
+Some systems may need additional firmware to boot properly (for example, to
+initialize network cards), which can be supplied during boot as another
+cpio file: https://wiki.debian.org/DebianInstaller/NetbootFirmware
 
 ## Example Playbook
 

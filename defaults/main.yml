@@ -24,6 +24,27 @@ pxeboot_memtest_checksum: "sha256:42b8da364fec58de1ea8d8ec8102bc3d2e7b1f10e8e63b
 pxeboot_syslinux_version: "5.10"
 pxeboot_syslinux_checksum: "sha256:d9cd7727bfed2c0ca5bf07bb3d213286e014a78e92a6a89ac32eb906d6b7ab3f"
 
+# Debian 10 image
+pxeboot_debian10_base_url: "https://deb.debian.org/debian/dists/buster/main/installer-amd64"
+pxeboot_debian10_version: "current/images/netboot/debian-installer/amd64/"
+
+# checksums from version as of 2021-03-22
+pxeboot_debian10_files:
+  - name: "linux"
+    checksum: "sha256:d758470d7d1b4148309533e73de20ad2276fa861ce4dabaf0dae360f782fa1fa"
+  - name: "initrd.gz"
+    checksum: "sha256:0410d8d013be5275c82c04e780307b76f520ad1859e9eb771c82aaef858a2ba6"
+
+pxeboot_debian10_linux_args: ""
+
+pxeboot_debian10_nonfree_url: "http://cdimage.debian.org/cdimage/unofficial/non-free/"
+
+# checksums from version as of 2021-03-22
+pxeboot_debian10_nonfree_files:
+  - path: "firmware/buster/current"
+    name: "firmware.cpio.gz"
+    checksum: "sha256:f69ffd2202e5aee01b8f500a46daddfb9f787788d4acac5069e6a331d375e721"
+
 # Ubuntu 18.04 image
 pxeboot_ubuntu1804_base_url: "http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64"
 pxeboot_ubuntu1804_version: "20101020ubuntu543.17/images/hwe-netboot/ubuntu-installer/amd64"
@@ -37,7 +58,6 @@ pxeboot_ubuntu1804_files:
 pxeboot_ubuntu1804_linux_args: ""
 
 # preseed config
-
 # this should be replaced with a modular crypt string, or login will not work.
 preseed_onfadmin_pw_crypt: "!!"
 

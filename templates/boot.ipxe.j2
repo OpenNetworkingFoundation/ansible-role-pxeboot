@@ -12,21 +12,21 @@ set http_server_url {{ pxeboot_web_server }}
 # menu
 :start
 menu ONF iPXE Boot Menu
-item --gap --             ------------------------- System Info ------------------------------------
+item --gap --             ------------------------- System and Network Info ------------------------
 item --gap --             MAC: ${net0/mac}, Serial Number: ${serial}, Chipset: ${net0/chip}
 item --gap --             Manufacturer: ${manufacturer}, Product: ${product}
 item --gap --             UUID: ${uuid}
-item --gap --             ------------------------- Network Info ------------------------------------
 item --gap --             IP: ${net0/ip}, Netmask: ${net0/netmask}, Gateway: ${net0/gateway}
 item --gap --             DNS Servers: ${net0/dns}, Domain: ${net0/domain}
 item --gap --             DHCP Server: ${net0/dhcp-server}
 item --gap --             ------------------------- Operating systems ------------------------------
+item --key d deb10        Debian 10 Installer
+item --key f deb10f       Debian 10 Installer (nonfree firmware)
 item --key u ub1804       Ubuntu 18.04 Installer
-item --key u ub1804a      Ubuntu 18.04 Installer (fully automatic)
-item --key u ub1804adt    Ubuntu 18.04 Installer (fully automatic, debug, text)
-item --gap --             ------------------------- Diagnostics ------------------------------------
+item --key a ub1804a      Ubuntu 18.04 Installer (fully automatic)
+item --key t ub1804adt    Ubuntu 18.04 Installer (fully automatic, debug, text)
+item --gap --             ------------------------- Utilities --------------------------------------
 item --key m memtest      Memtest
-item --gap --             ------------------------- Other ------------------------------------------
 item --key c configure    Configuration Menu
 item --key s shell        iPXE Shell
 item --key r reboot       Reboot
@@ -72,6 +72,21 @@ imgargs memdisk iso raw
 boot || goto failed
 
 # installers
+
+# Debian 10
+:deb10
+echo Booting Debian 10 Installer
+kernel ${http_server_url}/debian10/linux
+initrd ${http_server_url}/debian10/initrd.gz
+boot || goto failed
+
+# Debian 10 with nonfree firmware
+:deb10f
+echo Booting Debian 10 Installer with nonfree firmware
+kernel ${http_server_url}/debian10/linux initrd=initrd.gz initrd=firmware.cpio.gz
+initrd ${http_server_url}/debian10/initrd.gz
+initrd ${http_server_url}/debian10/firmware.cpio.gz
+boot || goto failed
 
 # Ubuntu 18.04
 :ub1804

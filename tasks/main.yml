@@ -29,6 +29,7 @@
 # create boot targets
 - include_tasks: "memtest.yml"
 - include_tasks: "ubuntu1804.yml"
+- include_tasks: "debian10.yml"
 
 - name: Create iPXE menu chainboot script from template
   template:
