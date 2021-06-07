@@ -7,6 +7,23 @@
 - name: Verify
   hosts: all
   tasks:
-  - name: example assertion
-    assert:
-      that: true
+
+    - name: Check that preseed files are available (Serial)
+      uri:
+        url: "http://127.0.0.1/ubuntu1804/{{ item['serial'] }}_preseed.cfg"
+        status_code: 200
+        return_content: true
+      register: ps_serial
+      failed_when: "item['hostname'] not in ps_serial.content"
+      with_items: "{{ pxeboot_hosts }}"
+      when: "'serial' in item and item.serial"
+
+    - name: Check for preseed files (MAC)
+      uri:
+        url: "http://127.0.0.1/ubuntu1804/{{ item['mac_address'] }}_preseed.cfg"
+        status_code: 200
+        return_content: true
+      register: ps_mac
+      failed_when: "item['hostname'] not in ps_mac.content"
+      with_items: "{{ pxeboot_hosts }}"
+      when: "'mac_address' in item and item.mac_address"

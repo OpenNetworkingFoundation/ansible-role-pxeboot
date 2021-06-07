@@ -8,8 +8,18 @@
 - name: Prepare for pxeboot role
   hosts: all
 
+  vars:
+    acme_username: "www-data"  # make independent of the acme role
+    vhosts:
+      - name: "boot.example.com"
+        default_server: true
+        autoindex: true
+
   pre_tasks:
 
     - name: update apt cache
       apt:
         update_cache: true
+
+  roles:
+    - nginx

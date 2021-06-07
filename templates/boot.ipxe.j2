@@ -23,7 +23,8 @@ item --gap --             ------------------------- Operating systems ----------
 item --key d deb10        Debian 10 Installer
 item --key f deb10f       Debian 10 Installer (nonfree firmware)
 item --key u ub1804       Ubuntu 18.04 Installer
-item --key a ub1804a      Ubuntu 18.04 Installer (fully automatic)
+item --key a ub1804as     Ubuntu 18.04 Installer (fully automatic, serial)
+item --key a ub1804am     Ubuntu 18.04 Installer (fully automatic, MAC)
 item --key t ub1804adt    Ubuntu 18.04 Installer (fully automatic, debug, text)
 item --gap --             ------------------------- Utilities --------------------------------------
 item --key m memtest      Memtest
@@ -95,13 +96,22 @@ kernel ${http_server_url}/ubuntu1804/linux
 initrd ${http_server_url}/ubuntu1804/initrd.gz
 boot || goto failed
 
-# Ubuntu 18.04 autoinstall
+# Ubuntu 18.04 autoinstall, serial
 #  https://ipxe.org/appnote/debian_preseed
-:ub1804a
-echo Booting Ubuntu 18.04 Installer
+:ub1804as
+echo Booting Ubuntu 18.04 Installer (autoinstall, serial)
 kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg
 initrd ${http_server_url}/ubuntu1804/initrd.gz
 initrd ${http_server_url}/ubuntu1804/${serial}_preseed.cfg preseed.cfg
+boot || goto failed
+
+# Ubuntu 18.04 autoinstall, MAC
+#  https://ipxe.org/appnote/debian_preseed
+:ub1804am
+echo Booting Ubuntu 18.04 Installer (autoinstall, MAC)
+kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg
+initrd ${http_server_url}/ubuntu1804/initrd.gz
+initrd ${http_server_url}/ubuntu1804/${net0/mac}_preseed.cfg preseed.cfg
 boot || goto failed
 
 # Ubuntu 18.04 autoinstall, text-mode, debug

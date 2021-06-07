@@ -22,7 +22,7 @@
     mode: "0644"
   with_items: "{{ pxeboot_ubuntu1804_files }}"
 
-- name: Create preseed files
+- name: Create preseed files (serial)
   template:
     src: "ubuntu1804_preseed.cfg.j2"
     dest: "{{ pxeboot_web_root }}/ubuntu1804/{{ item['serial'] }}_preseed.cfg"
@@ -30,3 +30,14 @@
     group: "{{ pxeboot_groupname }}"
     mode: "0644"
   with_items: "{{ pxeboot_hosts }}"
+  when: "'serial' in item and item.serial"
+
+- name: Create preseed files (MAC)
+  template:
+    src: "ubuntu1804_preseed.cfg.j2"
+    dest: "{{ pxeboot_web_root }}/ubuntu1804/{{ item['mac_address'] | lower }}_preseed.cfg"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_hosts }}"
+  when: "'mac_address' in item and item.mac_address"

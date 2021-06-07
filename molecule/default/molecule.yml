@@ -27,5 +27,11 @@ provisioner:
         ansible_python_interpreter: /usr/bin/python3
       ubuntu-18.04-priv:
         ansible_python_interpreter: /usr/bin/python3
+    group_vars:
+      all:
+        pxeboot_hosts:
+          - {domain: 'example.com', hostname: 'server1', serial: 'abc123'}
+          - {domain: 'example.com', hostname: 'server2', serial: 'def456', iface: 'eno2'}
+          - {domain: 'example.com', hostname: 'server3', mac_address: '01:23:45:ab:cd:ef'}
 verifier:
   name: ansible
