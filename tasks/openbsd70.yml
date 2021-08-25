@@ -1,0 +1,23 @@
+---
+# pxeboot tasks/openbsd70.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+- name: Create openbsd70 dir in webroot
+  file:
+    state: directory
+    path: "{{ pxeboot_web_root }}/openbsd70"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0755"
+
+- name: Download OpenBSD 7.0 base files
+  get_url:
+    url: "{{ pxeboot_openbsd70_base_url }}/{{ pxeboot_openbsd70_version }}/{{ item['name'] }}"
+    dest: "{{ pxeboot_web_root }}/openbsd70/{{ item['name'] }}"
+    checksum: "{{ item['checksum'] }}"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_openbsd70_files }}"

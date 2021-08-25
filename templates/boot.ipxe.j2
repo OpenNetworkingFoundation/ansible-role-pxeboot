@@ -20,14 +20,30 @@ item --gap --             IP: ${net0/ip}, Netmask: ${net0/netmask}, Gateway: ${n
 item --gap --             DNS Servers: ${net0/dns}, Domain: ${net0/domain}
 item --gap --             DHCP Server: ${net0/dhcp-server}
 item --gap --             ------------------------- Operating systems ------------------------------
+{% if "debian10" in pxeboot_boot_images %}
 item --key d deb10        Debian 10 Installer
 item --key f deb10f       Debian 10 Installer (nonfree firmware)
+{% endif %}
+{% if "debian11" in pxeboot_boot_images %}
+item --key g deb11        Debian 11 Installer
+item --key h deb11f       Debian 11 Installer (nonfree firmware)
+{% endif %}
+{% if "ubuntu1804" in pxeboot_boot_images %}
 item --key u ub1804       Ubuntu 18.04 Installer
 item --key a ub1804as     Ubuntu 18.04 Installer (fully automatic, serial)
-item --key a ub1804am     Ubuntu 18.04 Installer (fully automatic, MAC)
+item --key m ub1804am     Ubuntu 18.04 Installer (fully automatic, MAC)
 item --key t ub1804adt    Ubuntu 18.04 Installer (fully automatic, debug, text)
-item --gap --             ------------------------- Utilities --------------------------------------
+{% endif %}
+{% if "ubuntu2004" in pxeboot_boot_images %}
+item --key v ub2004       Ubuntu 20.04 Installer
+{% endif %}
+{% if "openbsd70" in pxeboot_boot_images %}
+item --key o openbsd70    OpenBSD 7.0 Installer
+{% endif %}
+{% if "memtest" in pxeboot_boot_images %}
 item --key m memtest      Memtest
+{% endif %}
+item --gap --             ------------------------- Utilities --------------------------------------
 item --key c configure    Configuration Menu
 item --key s shell        iPXE Shell
 item --key r reboot       Reboot
@@ -36,7 +52,7 @@ choose --timeout ${menu_timeout} --default ${menu_default} selected || goto canc
 set menu-timeout 0
 goto ${selected}
 
-# other functions
+# Utility functions
 :cancel
 echo Menu canceled, dropping to iPXE shell
 goto shell
@@ -65,14 +81,19 @@ reboot
 exit
 
 # diagnostics
+{% if "memtest" in pxeboot_boot_images %}
+
+# memtest
 :memtest
 echo Booting Memtest
-kernel ${http_server_url}/memtest/memdisk
+kernel ${http_server_url}/utils/memdisk
 initrd ${http_server_url}/memtest/memtest.iso
 imgargs memdisk iso raw
 boot || goto failed
+{% endif %}
 
 # installers
+{% if "debian10" in pxeboot_boot_images %}
 
 # Debian 10
 :deb10
@@ -88,6 +109,25 @@ kernel ${http_server_url}/debian10/linux initrd=initrd.gz initrd=firmware.cpio.g
 initrd ${http_server_url}/debian10/initrd.gz
 initrd ${http_server_url}/debian10/firmware.cpio.gz
 boot || goto failed
+{% endif %}
+{% if "debian11" in pxeboot_boot_images %}
+
+# Debian 11
+:deb11
+echo Booting Debian 11 Installer
+kernel ${http_server_url}/debian11/linux
+initrd ${http_server_url}/debian11/initrd.gz
+boot || goto failed
+
+# Debian 11 with nonfree firmware
+:deb11f
+echo Booting Debian 11 Installer with nonfree firmware
+kernel ${http_server_url}/debian11/linux initrd=initrd.gz initrd=firmware.cpio.gz
+initrd ${http_server_url}/debian11/initrd.gz
+initrd ${http_server_url}/debian11/firmware.cpio.gz
+boot || goto failed
+{% endif %}
+{% if "ubuntu1804" in pxeboot_boot_images %}
 
 # Ubuntu 18.04
 :ub1804
@@ -113,6 +153,7 @@ kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg
 initrd ${http_server_url}/ubuntu1804/initrd.gz
 initrd ${http_server_url}/ubuntu1804/${net0/mac}_preseed.cfg preseed.cfg
 boot || goto failed
+{% if pxeboot_image_debug %}
 
 # Ubuntu 18.04 autoinstall, text-mode, debug
 :ub1804adt
@@ -121,3 +162,24 @@ kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg D
 initrd ${http_server_url}/ubuntu1804/initrd.gz
 initrd ${http_server_url}/ubuntu1804/${serial}_preseed.cfg preseed.cfg
 boot || goto failed
+{% endif %}
+{% endif %}
+{% if "ubuntu2004" in pxeboot_boot_images %}
+
+# Ubuntu 18.04
+:ub2004
+echo Booting Ubuntu 20.04 Installer
+kernel ${http_server_url}/ubuntu2004/linux
+initrd ${http_server_url}/ubuntu2004/initrd.gz
+boot || goto failed
+{% endif %}
+{% if "openbsd70" in pxeboot_boot_images %}
+
+# OpenBSD 7.0
+:openbsd70
+echo Booting OpenBSD 7.0
+kernel ${http_server_url}/utils/memdisk
+initrd ${http_server_url}/openbsd70/cd70.iso
+imgargs memdisk iso raw
+boot || goto failed
+{% endif %}

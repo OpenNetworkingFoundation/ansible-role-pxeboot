@@ -11,6 +11,18 @@ pxeboot_web_root: "/srv/sites/boot.example.com"
 # dist dir, where downloaded files are stored
 pxeboot_dist_dir: "/opt/dist/pxeboot"
 
+# List of boot images to include
+pxeboot_boot_images:
+  - memtest
+  - debian10
+  - debian11
+  - ubuntu1804
+  - ubuntu2004
+  - openbsd70
+
+# whether or not to include debug options
+pxeboot_image_debug: true
+
 # memtest image
 #  see: https://ipxe.org/appnote/memtest
 pxeboot_memtest_version: "5.01"
@@ -26,36 +38,78 @@ pxeboot_syslinux_checksum: "sha256:d9cd7727bfed2c0ca5bf07bb3d213286e014a78e92a6a
 
 # Debian 10 image
 pxeboot_debian10_base_url: "https://deb.debian.org/debian/dists/buster/main/installer-amd64"
-pxeboot_debian10_version: "current/images/netboot/debian-installer/amd64/"
+pxeboot_debian10_version: "20190702+deb10u11/images/netboot/debian-installer/amd64/"
 
-# checksums from version as of 2021-03-22
+# checksums from version as of 2021-11-27
 pxeboot_debian10_files:
   - name: "linux"
-    checksum: "sha256:d758470d7d1b4148309533e73de20ad2276fa861ce4dabaf0dae360f782fa1fa"
+    checksum: "sha256:8c8a24cf5d65c33c2675d4226dea4f8412c9cfc2046f50ba440e037b47465147"
   - name: "initrd.gz"
-    checksum: "sha256:0410d8d013be5275c82c04e780307b76f520ad1859e9eb771c82aaef858a2ba6"
+    checksum: "sha256:b6b59929f3fcc1d55d16e573a063e403855ead009343117f36c022b7bff00edf"
 
 pxeboot_debian10_linux_args: ""
 
 pxeboot_debian10_nonfree_url: "http://cdimage.debian.org/cdimage/unofficial/non-free/"
 
-# checksums from version as of 2021-03-22
 pxeboot_debian10_nonfree_files:
-  - path: "firmware/buster/current"
+  - path: "firmware/buster/20211009"
     name: "firmware.cpio.gz"
-    checksum: "sha256:f69ffd2202e5aee01b8f500a46daddfb9f787788d4acac5069e6a331d375e721"
+    checksum: "sha256:a9743d56e877888a6984fd52e95192b0f97c908344bdee69c18e072325b8d4e4"
+
+# Debian 11 image
+pxeboot_debian11_base_url: "https://deb.debian.org/debian/dists/bullseye/main/installer-amd64"
+pxeboot_debian11_version: "20210731+deb11u2/images/netboot/debian-installer/amd64/"
+
+# checksums from version as of 2021-11-27
+pxeboot_debian11_files:
+  - name: "linux"
+    checksum: "sha256:0c30db8be595c063eb7a672f0e3aeb1274dc444cd75bf536b0fd01e2cf7066e1"
+  - name: "initrd.gz"
+    checksum: "sha256:c304f5f034996b2200145e3eabf466cbd00ace690944cec01003258abc53d2ce"
+
+pxeboot_debian11_linux_args: ""
+
+pxeboot_debian11_nonfree_url: "http://cdimage.debian.org/cdimage/unofficial/non-free/"
+
+pxeboot_debian11_nonfree_files:
+  - path: "firmware/bullseye/20211218"
+    name: "firmware.cpio.gz"
+    checksum: "sha256:96b98f5bfdf13e0d4434fd12e42cd49b719221a313c8cf9caa4bc9d6e66b3822"
 
 # Ubuntu 18.04 image
 pxeboot_ubuntu1804_base_url: "http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64"
-pxeboot_ubuntu1804_version: "20101020ubuntu543.17/images/hwe-netboot/ubuntu-installer/amd64"
+pxeboot_ubuntu1804_version: "20101020ubuntu543.19/images/hwe-netboot/ubuntu-installer/amd64"
 
+# checksums from version as of 2021-11-27
 pxeboot_ubuntu1804_files:
   - name: "linux"
-    checksum: "sha256:192f8a4357d6aa4d551ea943ec7c947e1f0b3a9a4e3ecd4dc483f8cb1972584e"
+    checksum: "sha256:cf73517963037c823e4fcad52b92c20525071957f85fe9516f0652d38488db3b"
   - name: "initrd.gz"
-    checksum: "sha256:b09083fd563c183f3ddbe1e28132620f2c5466d49c25c0b8299ae581165d04db"
+    checksum: "sha256:d7609e66d70189ccf4369c3e832d4a8e6a459de28a32b9ab72f1f8eaa82869e3"
 
 pxeboot_ubuntu1804_linux_args: ""
+
+# Ubuntu 20.04 image
+pxeboot_ubuntu2004_base_url: "http://archive.ubuntu.com/ubuntu/dists/focal-updates/main/installer-amd64"
+pxeboot_ubuntu2004_version: "20101020ubuntu614.3/legacy-images/netboot/ubuntu-installer/amd64"
+
+# checksums from version as of 2021-11-27
+pxeboot_ubuntu2004_files:
+  - name: "linux"
+    checksum: "sha256:cd6e8d6114d11d668aaba86e5e16c24762723d37fa9fd5b309dc1b8a0c2685ef"
+  - name: "initrd.gz"
+    checksum: "sha256:60b10062782ebcbc6b118c2f2bb2163eee9d1e6e6bfc1633a08505e52aab7a56"
+
+pxeboot_ubuntu2004_linux_args: ""
+
+# OpenBSD 7.0 image
+pxeboot_openbsd70_base_url: "https://cdn.openbsd.org/pub/OpenBSD"
+pxeboot_openbsd70_version: "7.0/amd64"
+
+# checksums from version as of 2021-11-27
+pxeboot_openbsd70_files:
+  - name: "cd70.iso"
+    checksum: "sha256:3e3e21b1aa4448cffba103f954b3604c69361ca1fe9a4e15287fc7298171b11f"
 
 # preseed config
 # this should be replaced with a modular crypt string, or login will not work.
@@ -67,5 +121,6 @@ preseed_onfadmin_ssh_pubkey: ""
 # list of hosts
 pxeboot_hosts:
   - serial: "12345678"
+    mac: "a1:b2:c3:d4:e5:f6"
     hostname: "host"
     domain: "domain"

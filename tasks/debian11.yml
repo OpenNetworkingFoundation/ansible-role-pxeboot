@@ -1,0 +1,33 @@
+---
+# pxeboot tasks/debian11.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+- name: Create debian11 dir in webroot
+  file:
+    state: directory
+    path: "{{ pxeboot_web_root }}/debian11"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0755"
+
+- name: Download debian11 base files
+  get_url:
+    url: "{{ pxeboot_debian11_base_url }}/{{ pxeboot_debian11_version }}/{{ item['name'] }}"
+    dest: "{{ pxeboot_web_root }}/debian11/{{ item['name'] }}"
+    checksum: "{{ item['checksum'] }}"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_debian11_files }}"
+
+- name: Download debian11 nonfree files
+  get_url:
+    url: "{{ pxeboot_debian11_nonfree_url }}/{{ item['path'] }}/{{ item['name'] }}"
+    dest: "{{ pxeboot_web_root }}/debian11/{{ item['name'] }}"
+    checksum: "{{ item['checksum'] }}"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_debian11_nonfree_files }}"

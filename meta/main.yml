@@ -5,23 +5,28 @@
 # SPDX-License-Identifier: Apache-2.0
 
 galaxy_info:
+  role: pxeboot
+
   author: Open Networking Foundation
-  description: Configures PXE and iPXE related boot scripts
+  description: Configures a webserver with iPXE related boot scripts and images
   company: Open Networking Foundation
 
   issue_tracker_url: https://jira.opennetworking.org/
 
   license: Apache-2.0
 
-  min_ansible_version: 2.9.5
+  min_ansible_version: 2.10.17
 
   platforms:
-    - name: Ubuntu
+    - name: ubuntu
       versions:
-        - "16.04"
-        - "18.04"
+        - bionic
+    - name: Debian
+      versions:
+        - bullseye
 
   galaxy_tags:
     - pxeboot
+    - ipxe
 
 dependencies: []

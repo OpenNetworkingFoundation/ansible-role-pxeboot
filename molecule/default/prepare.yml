@@ -21,5 +21,11 @@
       apt:
         update_cache: true
 
+    - name: Install ps command for Debian init.d script to function
+      apt:
+        name:
+          - "procps"
+        state: "present"
+
   roles:
     - nginx

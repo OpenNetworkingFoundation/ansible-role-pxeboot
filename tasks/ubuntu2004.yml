@@ -1,0 +1,26 @@
+---
+# pxeboot tasks/ubuntu2004.yml
+#
+# SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
+# SPDX-License-Identifier: Apache-2.0
+
+- name: Create ubuntu2004 dir in webroot
+  file:
+    state: directory
+    path: "{{ pxeboot_web_root }}/ubuntu2004"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0755"
+
+- name: Download ubuntu2004 files
+  get_url:
+    url: "{{ pxeboot_ubuntu2004_base_url }}/{{ pxeboot_ubuntu2004_version }}/{{ item['name'] }}"
+    dest: "{{ pxeboot_web_root }}/ubuntu2004/{{ item['name'] }}"
+    checksum: "{{ item['checksum'] }}"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_ubuntu2004_files }}"
+
+# NOTE: Ubuntu 20.04 switched away from using preseed to an autoinstall method
+# https://ubuntu.com/server/docs/install/autoinstall

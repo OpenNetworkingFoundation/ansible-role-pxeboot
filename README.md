@@ -1,7 +1,3 @@
-<!--
-SPDX-FileCopyrightText: © 2020 Open Networking Foundation <support@opennetworking.org>
-SPDX-License-Identifier: Apache-2.0
---!>
 # pxeboot
 
 Configures PXE and iPXE related boot scripts and images on an web server.
@@ -14,6 +10,8 @@ The iPXE `boot.ipxe` script:
 - Gives options for installation (interactive and autoinstall) and diagnostic
   tools (currently: memtest)
   - Alternate options to help debug or supply nonfree firmware
+- List of images in the iPXE menu is specified by the `pxeboot_boot_images`
+  variable for customizing which tools are available.
 - By default, continues boot normally after 10 seconds
 
 Also populates the kernel, initrd, and other files needed to network boot.
@@ -45,6 +43,14 @@ Documentation of the preseed process can be found in these links:
 Some systems may need additional firmware to boot properly (for example, to
 initialize network cards), which can be supplied during boot as another
 cpio file: https://wiki.debian.org/DebianInstaller/NetbootFirmware
+
+Additional references:
+
+https://wiki.debian.org/DebianInstaller/Preseed
+https://wiki.ubuntu.com/UEFI/PXE-netboot-install
+https://help.ubuntu.com/lts/installation-guide/example-preseed.txt
+
+iPXE script examples: https://github.com/netbootxyz/netboot.xyz
 
 ## Example Playbook
 

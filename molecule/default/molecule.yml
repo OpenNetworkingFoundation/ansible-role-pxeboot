@@ -14,8 +14,8 @@ platforms:
     privileged: true
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  - name: "debian-10-priv"
-    image: "quay.io/paulfantom/molecule-systemd:debian-10"
+  - name: "debian-11-priv"
+    image: "onfinfra/molecule-systemd:debian-11"
     privileged: true
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
@@ -23,7 +23,7 @@ provisioner:
   name: ansible
   inventory:
     host_vars:
-      debian-10-priv:
+      debian-11-priv:
         ansible_python_interpreter: /usr/bin/python3
       ubuntu-18.04-priv:
         ansible_python_interpreter: /usr/bin/python3
