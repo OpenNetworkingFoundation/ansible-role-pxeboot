@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 galaxy_info:
-  role: pxeboot
+  role_name: pxeboot
 
   author: Open Networking Foundation
   description: Configures a webserver with iPXE related boot scripts and images
