@@ -14,7 +14,6 @@ pxeboot_dist_dir: "/opt/dist/pxeboot"
 # List of boot images to include
 pxeboot_boot_images:
   - memtest
-  - debian10
   - debian11
   - ubuntu1804
   - ubuntu2004
@@ -58,23 +57,23 @@ pxeboot_debian10_nonfree_files:
 
 # Debian 11 image
 pxeboot_debian11_base_url: "https://deb.debian.org/debian/dists/bullseye/main/installer-amd64"
-pxeboot_debian11_version: "20210731+deb11u2/images/netboot/debian-installer/amd64/"
+pxeboot_debian11_version: "20210731+deb11u3/images/netboot/debian-installer/amd64/"
 
 # checksums from version as of 2021-11-27
 pxeboot_debian11_files:
   - name: "linux"
-    checksum: "sha256:0c30db8be595c063eb7a672f0e3aeb1274dc444cd75bf536b0fd01e2cf7066e1"
+    checksum: "sha256:b8e18400ca9c268334c2c1d5a911c2c1f4f522480a23bcaba1798b5c810edeea"
   - name: "initrd.gz"
-    checksum: "sha256:c304f5f034996b2200145e3eabf466cbd00ace690944cec01003258abc53d2ce"
+    checksum: "sha256:f8892c6b79817257a05a6d947be00ded56dbec057dff961dd1f526b0ab325320"
 
 pxeboot_debian11_linux_args: ""
 
 pxeboot_debian11_nonfree_url: "http://cdimage.debian.org/cdimage/unofficial/non-free/"
 
 pxeboot_debian11_nonfree_files:
-  - path: "firmware/bullseye/20211218"
+  - path: "firmware/bullseye/20220326"
     name: "firmware.cpio.gz"
-    checksum: "sha256:96b98f5bfdf13e0d4434fd12e42cd49b719221a313c8cf9caa4bc9d6e66b3822"
+    checksum: "sha256:0b4a8e6f8704ab3225946087b0af8b0bedceea9f8a3d28bda5151dccecf94c37"
 
 # Ubuntu 18.04 image
 pxeboot_ubuntu1804_base_url: "http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64"

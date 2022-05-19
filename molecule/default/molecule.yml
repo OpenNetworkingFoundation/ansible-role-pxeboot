@@ -9,11 +9,6 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: "ubuntu-18.04-priv"
-    image: "quay.io/paulfantom/molecule-systemd:ubuntu-18.04"
-    privileged: true
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
   - name: "debian-11-priv"
     image: "onfinfra/molecule-systemd:debian-11"
     privileged: true
@@ -25,13 +20,15 @@ provisioner:
     host_vars:
       debian-11-priv:
         ansible_python_interpreter: /usr/bin/python3
-      ubuntu-18.04-priv:
-        ansible_python_interpreter: /usr/bin/python3
     group_vars:
       all:
         pxeboot_hosts:
           - {domain: 'example.com', hostname: 'server1', serial: 'abc123'}
           - {domain: 'example.com', hostname: 'server2', serial: 'def456', iface: 'eno2'}
           - {domain: 'example.com', hostname: 'server3', mac_address: '01:23:45:ab:cd:ef'}
+        pxeboot_boot_images:
+          - debian11
+          - ubuntu1804
+
 verifier:
   name: ansible

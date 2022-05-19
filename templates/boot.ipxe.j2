@@ -27,6 +27,8 @@ item --key f deb10f       Debian 10 Installer (nonfree firmware)
 {% if "debian11" in pxeboot_boot_images %}
 item --key g deb11        Debian 11 Installer
 item --key h deb11f       Debian 11 Installer (nonfree firmware)
+item --key h deb11afs     Debian 11 Installer (nonfree firmware, auto, serial)
+item --key h deb11afm     Debian 11 Installer (nonfree firmware, auto, MAC)
 {% endif %}
 {% if "ubuntu1804" in pxeboot_boot_images %}
 item --key u ub1804       Ubuntu 18.04 Installer
@@ -98,16 +100,16 @@ boot || goto failed
 # Debian 10
 :deb10
 echo Booting Debian 10 Installer
-kernel ${http_server_url}/debian10/linux
-initrd ${http_server_url}/debian10/initrd.gz
+kernel ${http_server_url}/debian10/linux initrd=initrd.gz
+initrd ${http_server_url}/debian10/initrd.gz initrd.gz
 boot || goto failed
 
 # Debian 10 with nonfree firmware
 :deb10f
 echo Booting Debian 10 Installer with nonfree firmware
 kernel ${http_server_url}/debian10/linux initrd=initrd.gz initrd=firmware.cpio.gz
-initrd ${http_server_url}/debian10/initrd.gz
-initrd ${http_server_url}/debian10/firmware.cpio.gz
+initrd ${http_server_url}/debian10/initrd.gz initrd.gz
+initrd ${http_server_url}/debian10/firmware.cpio.gz firmware.cpio.gz
 boot || goto failed
 {% endif %}
 {% if "debian11" in pxeboot_boot_images %}
@@ -115,7 +117,7 @@ boot || goto failed
 # Debian 11
 :deb11
 echo Booting Debian 11 Installer
-kernel ${http_server_url}/debian11/linux
+kernel ${http_server_url}/debian11/linux initrd=initrd.gz
 initrd ${http_server_url}/debian11/initrd.gz
 boot || goto failed
 
@@ -123,8 +125,26 @@ boot || goto failed
 :deb11f
 echo Booting Debian 11 Installer with nonfree firmware
 kernel ${http_server_url}/debian11/linux initrd=initrd.gz initrd=firmware.cpio.gz
-initrd ${http_server_url}/debian11/initrd.gz
-initrd ${http_server_url}/debian11/firmware.cpio.gz
+initrd ${http_server_url}/debian11/initrd.gz initrd.gz
+initrd ${http_server_url}/debian11/firmware.cpio.gz firmware.cpio.gz
+boot || goto failed
+
+# Debian 11 with nonfree firmware, auto, serial
+:deb11afs
+echo Booting Debian 11 Installer with nonfree firmware, auto, serial
+kernel ${http_server_url}/debian11/linux initrd=initrd.gz initrd=firmware.cpio.gz initrd=preseed.cfg
+initrd ${http_server_url}/debian11/initrd.gz initrd.gz
+initrd ${http_server_url}/debian11/firmware.cpio.gz firmware.cpio.gz
+initrd ${http_server_url}/debian11/${serial}_preseed.cfg preseed.cfg
+boot || goto failed
+
+# Debian 11 with nonfree firmware, auto, MAC
+:deb11afm
+echo Booting Debian 11 Installer with nonfree firmware, auto, MAC
+kernel ${http_server_url}/debian11/linux initrd=initrd.gz initrd=firmware.cpio.gz initrd=preseed.cfg
+initrd ${http_server_url}/debian11/initrd.gz initrd.gz
+initrd ${http_server_url}/debian11/firmware.cpio.gz firmware.cpio.gz
+initrd ${http_server_url}/debian11/${net0/mac}_preseed.cfg preseed.cfg
 boot || goto failed
 {% endif %}
 {% if "ubuntu1804" in pxeboot_boot_images %}
@@ -132,8 +152,8 @@ boot || goto failed
 # Ubuntu 18.04
 :ub1804
 echo Booting Ubuntu 18.04 Installer
-kernel ${http_server_url}/ubuntu1804/linux
-initrd ${http_server_url}/ubuntu1804/initrd.gz
+kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz
+initrd ${http_server_url}/ubuntu1804/initrd.gz initrd.gz
 boot || goto failed
 
 # Ubuntu 18.04 autoinstall, serial
@@ -141,7 +161,7 @@ boot || goto failed
 :ub1804as
 echo Booting Ubuntu 18.04 Installer (autoinstall, serial)
 kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg
-initrd ${http_server_url}/ubuntu1804/initrd.gz
+initrd ${http_server_url}/ubuntu1804/initrd.gz initrd.gz
 initrd ${http_server_url}/ubuntu1804/${serial}_preseed.cfg preseed.cfg
 boot || goto failed
 
@@ -150,7 +170,7 @@ boot || goto failed
 :ub1804am
 echo Booting Ubuntu 18.04 Installer (autoinstall, MAC)
 kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg
-initrd ${http_server_url}/ubuntu1804/initrd.gz
+initrd ${http_server_url}/ubuntu1804/initrd.gz initrd.gz
 initrd ${http_server_url}/ubuntu1804/${net0/mac}_preseed.cfg preseed.cfg
 boot || goto failed
 {% if pxeboot_image_debug %}
@@ -159,7 +179,7 @@ boot || goto failed
 :ub1804adt
 echo Booting Ubuntu 18.04 Installer, text mode, debug
 kernel ${http_server_url}/ubuntu1804/linux initrd=initrd.gz initrd=preseed.cfg DEBIAN_FRONTEND=text BOOT_DEBUG=2
-initrd ${http_server_url}/ubuntu1804/initrd.gz
+initrd ${http_server_url}/ubuntu1804/initrd.gz initrd.gz
 initrd ${http_server_url}/ubuntu1804/${serial}_preseed.cfg preseed.cfg
 boot || goto failed
 {% endif %}
@@ -169,8 +189,8 @@ boot || goto failed
 # Ubuntu 18.04
 :ub2004
 echo Booting Ubuntu 20.04 Installer
-kernel ${http_server_url}/ubuntu2004/linux
-initrd ${http_server_url}/ubuntu2004/initrd.gz
+kernel ${http_server_url}/ubuntu2004/linux initrd=initrd.gz
+initrd ${http_server_url}/ubuntu2004/initrd.gz initrd.gz
 boot || goto failed
 {% endif %}
 {% if "openbsd70" in pxeboot_boot_images %}

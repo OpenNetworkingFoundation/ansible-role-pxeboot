@@ -23,10 +23,13 @@ yamllint: ## lint check with yamllint
     -d "{extends: default, rules: {line-length: {max: 119}}}" \
     -s $(YAML_FILES)
 
+# List of molecule files, not including base molecule.yml which isn't ansible format
+MOLECULE_FILES ?= $(shell find molecule -type f -name '*.yml' \! -name 'molecule.yml' -print )
+
 ansiblelint: ## lint check with ansible-lint
 	ansible-lint --version
 	ansible-lint -v .
-	ansible-lint -v molecule/*/*
+	ansible-lint -v $(MOLECULE_FILES)
 
 license: ## Check license with the reuse tool
 	reuse --version

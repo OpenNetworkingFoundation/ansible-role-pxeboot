@@ -31,3 +31,23 @@
     group: "{{ pxeboot_groupname }}"
     mode: "0644"
   with_items: "{{ pxeboot_debian11_nonfree_files }}"
+
+- name: Create debian11 preseed files (serial)
+  template:
+    src: "debian11_preseed.cfg.j2"
+    dest: "{{ pxeboot_web_root }}/debian11/{{ item['serial'] }}_preseed.cfg"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_hosts }}"
+  when: "'serial' in item and item.serial"
+
+- name: Create preseed files (MAC)
+  template:
+    src: "debian11_preseed.cfg.j2"
+    dest: "{{ pxeboot_web_root }}/debian11/{{ item['mac_address'] | lower }}_preseed.cfg"
+    owner: "{{ pxeboot_username }}"
+    group: "{{ pxeboot_groupname }}"
+    mode: "0644"
+  with_items: "{{ pxeboot_hosts }}"
+  when: "'mac_address' in item and item.mac_address"

@@ -14,8 +14,10 @@
 
 - name: Download memtest compressed ISO
   get_url:
-    url: >
-      http://memtest.org/download/{{ pxeboot_memtest_version }}/memtest86+-{{ pxeboot_memtest_version }}.iso.gz
+    url: >-
+      https://memtest.org/download/archives/{{
+      pxeboot_memtest_version }}/memtest86+-{{
+      pxeboot_memtest_version }}.iso.gz
     checksum: "{{ pxeboot_memtest_checksum }}"
     dest: "{{ pxeboot_dist_dir }}/memtest86+-{{ pxeboot_memtest_version }}.iso.gz"
     owner: "root"

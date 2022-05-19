@@ -2,6 +2,8 @@
 
 Configures PXE and iPXE related boot scripts and images on an web server.
 
+Also creates preseed files used to automate OS installation.
+
 See the `ipxe-build` repo for building iPXE payload images.
 
 The iPXE `boot.ipxe` script:
@@ -18,17 +20,19 @@ Also populates the kernel, initrd, and other files needed to network boot.
 
 For fully automated installation, separate Debian/Ubuntu preseed files are
 created based on the serial number of the device (and possibly other criteria
-like MAC address in the future).  Hosts are defined in the pxeboot_hosts list,
-which has these options:
+like MAC address in the future).  Hosts are defined in the ``pxeboot_hosts``
+list of dicts, which each have these keys:
 
 - `domain`: Domain extension for the host
 - `hostname`: Hostname of the system
-- `serial`: Serial number, must match the SMBIOS supplied serial for server to
-  boot properly.
 - `iface`: (optional) Network interface to use when setting up the system.
   This is primarily to work around this bug which can cause the wrong interface
   to be selected in the install process:
   https://bugs.launchpad.net/ubuntu/+source/netcfg/+bug/713385
+- To allow iPXE to load a file specific to the hardware, one or both of these
+  keys must be included:
+  - `serial`: Device serial number, must match value given in SMBIOS
+  - `mac_address`: MAC address of the network card, colon separated format
 
 Documentation of the preseed process can be found in these links:
 

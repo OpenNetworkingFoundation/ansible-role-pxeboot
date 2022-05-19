@@ -6,6 +6,7 @@
 
 galaxy_info:
   role_name: pxeboot
+  namespace: onf
 
   author: Open Networking Foundation
   description: Configures a webserver with iPXE related boot scripts and images
