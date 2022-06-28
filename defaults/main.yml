@@ -35,45 +35,25 @@ pxeboot_memtest_checksum: "sha256:42b8da364fec58de1ea8d8ec8102bc3d2e7b1f10e8e63b
 pxeboot_syslinux_version: "5.10"
 pxeboot_syslinux_checksum: "sha256:d9cd7727bfed2c0ca5bf07bb3d213286e014a78e92a6a89ac32eb906d6b7ab3f"
 
-# Debian 10 image
-pxeboot_debian10_base_url: "https://deb.debian.org/debian/dists/buster/main/installer-amd64"
-pxeboot_debian10_version: "20190702+deb10u11/images/netboot/debian-installer/amd64/"
-
-# checksums from version as of 2021-11-27
-pxeboot_debian10_files:
-  - name: "linux"
-    checksum: "sha256:8c8a24cf5d65c33c2675d4226dea4f8412c9cfc2046f50ba440e037b47465147"
-  - name: "initrd.gz"
-    checksum: "sha256:b6b59929f3fcc1d55d16e573a063e403855ead009343117f36c022b7bff00edf"
-
-pxeboot_debian10_linux_args: ""
-
-pxeboot_debian10_nonfree_url: "http://cdimage.debian.org/cdimage/unofficial/non-free/"
-
-pxeboot_debian10_nonfree_files:
-  - path: "firmware/buster/20211009"
-    name: "firmware.cpio.gz"
-    checksum: "sha256:a9743d56e877888a6984fd52e95192b0f97c908344bdee69c18e072325b8d4e4"
-
 # Debian 11 image
 pxeboot_debian11_base_url: "https://deb.debian.org/debian/dists/bullseye/main/installer-amd64"
-pxeboot_debian11_version: "20210731+deb11u3/images/netboot/debian-installer/amd64/"
+pxeboot_debian11_version: "20210731+deb11u4/images/netboot/debian-installer/amd64/"
 
-# checksums from version as of 2021-11-27
+# checksums from version as of 2022-06-20
 pxeboot_debian11_files:
   - name: "linux"
-    checksum: "sha256:b8e18400ca9c268334c2c1d5a911c2c1f4f522480a23bcaba1798b5c810edeea"
+    checksum: "sha256:c5500987889bca74fc457541fec9b55b8b6092827032821d3e351e84dcb04ff2"
   - name: "initrd.gz"
-    checksum: "sha256:f8892c6b79817257a05a6d947be00ded56dbec057dff961dd1f526b0ab325320"
+    checksum: "sha256:b16c4b475b27c9fd8abdf68d5dec6fb0107cb6645d8f75613ff54cf6fd829abc"
 
 pxeboot_debian11_linux_args: ""
 
 pxeboot_debian11_nonfree_url: "http://cdimage.debian.org/cdimage/unofficial/non-free/"
 
 pxeboot_debian11_nonfree_files:
-  - path: "firmware/bullseye/20220326"
+  - path: "firmware/bullseye/20220709"
     name: "firmware.cpio.gz"
-    checksum: "sha256:0b4a8e6f8704ab3225946087b0af8b0bedceea9f8a3d28bda5151dccecf94c37"
+    checksum: "sha256:290989bb6d96420f95bcc0c993c462b9cace2afaaf872feb7f00a2ac299ebfe1"
 
 # Ubuntu 18.04 image
 pxeboot_ubuntu1804_base_url: "http://archive.ubuntu.com/ubuntu/dists/bionic-updates/main/installer-amd64"
