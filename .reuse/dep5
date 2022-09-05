@@ -1,5 +1,5 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
-Files: .cookiecutter_params.json VERSION .gitreview README.md
+Files: .cookiecutter_params.json VERSION README.md
 Copyright: 2020 Open Networking Foundation
 License: Apache-2.0
